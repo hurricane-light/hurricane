@@ -12,7 +12,7 @@ namespace Hurricane
 
             (string login, string password) = GetCredentials();
 
-            Bot bot = new Bot("APIkey");
+            Bot bot = new Bot("ApiToken");
             bot.OnMessage += BotOnMessage;
 
             web = new Web("https://epe.isd.dp.ua/isddb/db.aspx?mode=week&login=", login, password);
@@ -35,7 +35,8 @@ namespace Hurricane
 
         private static void BotOnMessage(object sender, UserEventArgs e)
         {
-            e.UserData = web.GetUserData(e.Login);
+            string userDataHtmlPage = web.GetUserDataHtmlPage(e.Login);
+            e.UserData = HtmlParser.GetUserData(userDataHtmlPage);
         }
 
         private static void PrepareLogger()
