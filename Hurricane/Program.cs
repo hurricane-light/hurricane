@@ -12,7 +12,7 @@ namespace Hurricane
 
             (string login, string password) = GetCredentials();
 
-            Bot bot = new Bot("831149116:AAEopxTReuZTnAmzNDc7QILMASvsNRmypq8");
+            Bot bot = new Bot("APIkey");
             bot.OnMessage += BotOnMessage;
 
             web = new Web("https://epe.isd.dp.ua/isddb/db.aspx?mode=week&login=", login, password);
