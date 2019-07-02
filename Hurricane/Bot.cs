@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -12,21 +11,6 @@ namespace Hurricane
     {
         private IDataProvider dataProvider;
         private readonly TelegramBotClient client;
-        private readonly HashSet<long> allowedChats = new HashSet<long>
-        {
-            248580711,
-            438265830,
-            110638968,
-            98331770
-        };
-
-        private readonly HashSet<string> allowedLogins = new HashSet<string>
-        {
-            "psok",
-            "tsok",
-            "drud",
-            "ovor"
-        };
 
         public Bot(IDataProvider dataProvider)
         {
@@ -81,12 +65,12 @@ namespace Hurricane
 
         private bool IsChatAllowed(long chatId)
         {
-            return allowedChats.Contains(chatId);
+            return Settings.ALLOWED_CHATS.Contains(chatId);
         }
 
         private bool IsLoginAllowed(string login)
         {
-            return allowedLogins.Contains(login);
+            return Settings.ALLOWED_LOGINS.Contains(login);
         }
 
         private bool IsLooksLikeLogin(string text)
