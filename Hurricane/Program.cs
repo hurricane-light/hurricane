@@ -7,21 +7,17 @@ namespace Hurricane
     class Program
     {
         private static Web web;
-
-        private static string API_TOKEN = ConfigurationSettings.AppSettings["ApiToken"];
-        private static string URL_USER_WEEK = ConfigurationSettings.AppSettings["UrlUserWeek"];
-        private static string IS_MOKED = ConfigurationSettings.AppSettings["IsMoked"];
-
+        
         static void Main(string[] args)
         {
             PrepareLogger();
 
             (string login, string password) = GetCredentials();
 
-            Bot bot = new Bot(API_TOKEN);
+            Bot bot = new Bot();
             bot.OnMessage += BotOnMessage;
 
-            web = new Web(URL_USER_WEEK, login, password);
+            web = new Web(login, password);
 
             try
             {

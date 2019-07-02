@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="HtmlParser.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Web.cs" />
     <Compile Include="UserEventArgs.cs" />
     <Compile Include="Program.cs" />

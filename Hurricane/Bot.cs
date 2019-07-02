@@ -17,21 +17,23 @@ namespace Hurricane
         {
             248580711,
             438265830,
-            110638968
+            110638968,
+            98331770
         };
 
         private readonly HashSet<string> allowedLogins = new HashSet<string>
         {
             "psok",
             "tsok",
-            "drud"
+            "drud",
+            "ovor"
         };
 
         public event TextEventHandler OnMessage;
 
-        public Bot(string apiToken)
+        public Bot()
         {
-            client = new TelegramBotClient(apiToken);
+            client = new TelegramBotClient(Settings.API_TOKEN);
             client.OnMessage += BotOnMessage;
             client.OnMessageEdited += BotOnMessage;
         }

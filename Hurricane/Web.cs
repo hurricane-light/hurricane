@@ -9,9 +9,9 @@ namespace Hurricane
         private WebClient webClient;
         private string url;
 
-        public Web(string url, string login, string password)
+        public Web(string login, string password)
         {
-            this.url = url;
+            this.url = Settings.URL_USER_WEEK;
             webClient = new WebClient();
             webClient.Credentials = new NetworkCredential(login, password);
         }
