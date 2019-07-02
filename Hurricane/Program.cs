@@ -5,18 +5,13 @@ namespace Hurricane
 {
     class Program
     {
-        private static IDataProvider dataProvider;
-        
         static void Main(string[] args)
         {
             PrepareLogger();
 
             (string login, string password) = WebUtils.GetCredentials();
-
-            Bot bot = new Bot();
-            bot.OnMessage += BotOnMessage;
-
-            dataProvider = new WebDataProvider(login, password);
+            IDataProvider dataProvider = new WebDataProvider(login, password);
+            Bot bot = new Bot(dataProvider);
 
             try
             {
@@ -32,11 +27,6 @@ namespace Hurricane
             {
                 bot.Stop();
             }
-        }
-
-        private static void BotOnMessage(object sender, UserEventArgs e)
-        {
-            e.UserData = dataProvider.GetUserData(e.Login);
         }
 
         private static void PrepareLogger()

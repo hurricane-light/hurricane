@@ -8,10 +8,9 @@ using Telegram.Bot.Types.Enums;
 
 namespace Hurricane
 {
-    public delegate void TextEventHandler(object sender, UserEventArgs e);
-
     public class Bot
     {
+        private IDataProvider dataProvider;
         private readonly TelegramBotClient client;
         private readonly HashSet<long> allowedChats = new HashSet<long>
         {
@@ -29,13 +28,11 @@ namespace Hurricane
             "ovor"
         };
 
-        public event TextEventHandler OnMessage;
-
-        public Bot()
+        public Bot(IDataProvider dataProvider)
         {
+            this.dataProvider = dataProvider;
             client = new TelegramBotClient(Settings.API_TOKEN);
             client.OnMessage += BotOnMessage;
-            client.OnMessageEdited += BotOnMessage;
         }
 
         public void Start()
@@ -57,15 +54,14 @@ namespace Hurricane
                 if (IsChatAllowed(e.Message.Chat.Id)
                     && IsLoginAllowed(e.Message.Text))
                 {
-                    UserEventArgs args = new UserEventArgs(e.Message.Text);
-                    OnMessage(this, args);
-                    client.SendTextMessageAsync(e.Message.Chat.Id,
-                                                args.UserData);
+                    string login = e.Message.Text;
+                    string userData = dataProvider.GetUserData(login);
+                    client.SendTextMessageAsync(e.Message.Chat.Id, userData);
                 }
                 else
                 {
                     client.SendTextMessageAsync(e.Message.Chat.Id,
-                                                    string.Format("Hello {0}!", e.Message.Chat.FirstName));
+                                                string.Format("Hello {0}!", e.Message.Chat.FirstName));
                 }
             }
         }

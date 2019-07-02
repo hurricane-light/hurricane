@@ -62,14 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="HtmlParser.cs" />
+    <Compile Include="WebDataProvider\HtmlParser.cs" />
     <Compile Include="IDataProvider.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="WebDataProvider.cs" />
-    <Compile Include="UserEventArgs.cs" />
+    <Compile Include="WebDataProvider\WebDataProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebUtils.cs" />
+    <Compile Include="WebDataProvider\WebUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
