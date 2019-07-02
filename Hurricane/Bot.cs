@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -11,11 +12,13 @@ namespace Hurricane
     {
         private IDataProvider dataProvider;
         private readonly TelegramBotClient client;
+        private HashSet<string> allowedUsers;
 
         public Bot(IDataProvider dataProvider)
         {
             this.dataProvider = dataProvider;
             client = new TelegramBotClient(Settings.API_TOKEN);
+            allowedUsers = dataProvider.GetAllUsers();
             client.OnMessage += BotOnMessage;
         }
 
@@ -70,7 +73,7 @@ namespace Hurricane
 
         private bool IsLoginAllowed(string login)
         {
-            return Settings.ALLOWED_LOGINS.Contains(login);
+            return allowedUsers.Contains(login);
         }
 
         private bool IsLooksLikeLogin(string text)

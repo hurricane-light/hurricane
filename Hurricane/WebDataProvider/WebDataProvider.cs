@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
@@ -7,37 +8,37 @@ namespace Hurricane
     public class WebDataProvider: IDataProvider
     {
         private WebClient webClient;
-        private string url;
+        private string urlAllUsers;
+        private string urlUserWeek;
 
         public WebDataProvider(string login, string password)
         {
-            this.url = Settings.URL_USER_WEEK;
+            urlAllUsers = Settings.URL_ALL_USERS;
+            urlUserWeek = Settings.URL_USER_WEEK;
             webClient = new WebClient();
             webClient.Credentials = new NetworkCredential(login, password);
         }
 
+        public HashSet<string> GetAllUsers()
+        {
+            string allUsersHtmlPage = GetHtmlPage(urlAllUsers);
+            return HtmlParser.ParseAllUsers(allUsersHtmlPage);
+        }
+
         public string GetUserData(string login)
         {
-            string userDataHtmlPage = GetUserDataHtmlPage(login);
+            string userDataHtmlPage = GetHtmlPage(urlUserWeek + login);
             return HtmlParser.ParseUserData(userDataHtmlPage);
         }
 
-        private string GetUserDataHtmlPage(string login)
+        private string GetHtmlPage(string url)
         {
-            string urlWithLogin = url + login;
-            try
+            using (Stream stream = webClient.OpenRead(new Uri(url)))
             {
-                using (Stream stream = webClient.OpenRead(new Uri(urlWithLogin)))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
+                    return reader.ReadToEnd();
                 }
-            }
-            catch (WebException e)
-            {
-                throw e;
             }
         }
     }

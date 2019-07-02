@@ -7,13 +7,24 @@ namespace Hurricane
 {
     public class HtmlParser
     {
+        public static HashSet<string> ParseAllUsers(string htmlPage)
+        {
+            // moked
+            return Settings.ALLOWED_USERS;
+        }
+
         public static string ParseUserData(string htmlPage)
+        {
+            HtmlDocument htmlDoc = GetHtmlDocument(htmlPage);
+            Dictionary<string, string> userData = GetUserDataFromDocument(htmlDoc);
+            return GetFormatedUserData(userData);
+        }
+
+        private static HtmlDocument GetHtmlDocument(string htmlPage)
         {
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(htmlPage);
-
-            Dictionary<string, string> userData = GetUserDataFromDocument(htmlDoc);
-            return FormatUserData(userData);
+            return htmlDoc;
         }
 
         private static Dictionary<string, string> GetUserDataFromDocument(HtmlDocument htmlDoc)
@@ -107,7 +118,7 @@ namespace Hurricane
                     .First();
         }
 
-        private static string FormatUserData(Dictionary<string, string> userData)
+        private static string GetFormatedUserData(Dictionary<string, string> userData)
         {
             StringBuilder userDataFormatted = new StringBuilder();
 
