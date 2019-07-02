@@ -7,7 +7,7 @@ namespace Hurricane
 {
     public class HtmlParser
     {
-        public static string GetUserData(string htmlPage)
+        public static string ParseUserData(string htmlPage)
         {
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(htmlPage);

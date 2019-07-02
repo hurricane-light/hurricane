@@ -4,19 +4,25 @@ using System.Net;
 
 namespace Hurricane
 {
-    public class Web
+    public class WebDataProvider: IDataProvider
     {
         private WebClient webClient;
         private string url;
 
-        public Web(string login, string password)
+        public WebDataProvider(string login, string password)
         {
             this.url = Settings.URL_USER_WEEK;
             webClient = new WebClient();
             webClient.Credentials = new NetworkCredential(login, password);
         }
 
-        public string GetUserDataHtmlPage(string login)
+        public string GetUserData(string login)
+        {
+            string userDataHtmlPage = GetUserDataHtmlPage(login);
+            return HtmlParser.ParseUserData(userDataHtmlPage);
+        }
+
+        private string GetUserDataHtmlPage(string login)
         {
             string urlWithLogin = url + login;
             try

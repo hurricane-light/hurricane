@@ -5,7 +5,7 @@ namespace Hurricane
 {
     class Program
     {
-        private static Web web;
+        private static IDataProvider dataProvider;
         
         static void Main(string[] args)
         {
@@ -16,7 +16,7 @@ namespace Hurricane
             Bot bot = new Bot();
             bot.OnMessage += BotOnMessage;
 
-            web = new Web(login, password);
+            dataProvider = new WebDataProvider(login, password);
 
             try
             {
@@ -36,8 +36,7 @@ namespace Hurricane
 
         private static void BotOnMessage(object sender, UserEventArgs e)
         {
-            string userDataHtmlPage = web.GetUserDataHtmlPage(e.Login);
-            e.UserData = HtmlParser.GetUserData(userDataHtmlPage);
+            e.UserData = dataProvider.GetUserData(e.Login);
         }
 
         private static void PrepareLogger()

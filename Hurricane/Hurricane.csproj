@@ -63,8 +63,9 @@
   <ItemGroup>
     <Compile Include="Bot.cs" />
     <Compile Include="HtmlParser.cs" />
+    <Compile Include="IDataProvider.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Web.cs" />
+    <Compile Include="WebDataProvider.cs" />
     <Compile Include="UserEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
