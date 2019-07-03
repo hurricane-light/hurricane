@@ -9,8 +9,8 @@ namespace Hurricane
     {
         public static HashSet<string> ParseAllUsers(string htmlPage)
         {
-            // moked
-            return Settings.ALLOWED_USERS;
+            HtmlDocument htmlDoc = GetHtmlDocument(htmlPage);
+            return GetAllUsersFromDocument(htmlDoc);
         }
 
         public static string ParseUserData(string htmlPage)
@@ -25,6 +25,28 @@ namespace Hurricane
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(htmlPage);
             return htmlDoc;
+        }
+
+        private static HashSet<string> GetAllUsersFromDocument(HtmlDocument htmlDoc)
+        {
+            HashSet<string> users = new HashSet<string>();
+
+            HtmlNode tableNode = GetHtmlSubNodeById(htmlDoc.DocumentNode,
+                                    "div",
+                                    "ctl00_PlaceHolderMain_UpdPnl_Office");
+
+            IEnumerable<HtmlNode> tableRows = tableNode.Descendants("tr");
+
+            foreach (HtmlNode row in tableRows)
+            {
+                IEnumerable<HtmlNode> rowCells = row.Descendants("td");
+                if (rowCells.Count() > 0)
+                {
+                    users.Add(rowCells.ToArray()[4].InnerText);
+                }
+            }
+
+            return users;
         }
 
         private static Dictionary<string, string> GetUserDataFromDocument(HtmlDocument htmlDoc)

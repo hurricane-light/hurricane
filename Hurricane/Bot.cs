@@ -10,20 +10,20 @@ namespace Hurricane
 {
     public class Bot
     {
-        private IDataProvider dataProvider;
+        private readonly IDataProvider dataProvider;
         private readonly TelegramBotClient client;
         private HashSet<string> allowedUsers;
 
         public Bot(IDataProvider dataProvider)
         {
             this.dataProvider = dataProvider;
-            client = new TelegramBotClient(Settings.API_TOKEN);
-            allowedUsers = dataProvider.GetAllUsers();
+            client = new TelegramBotClient(Settings.API_TOKEN);  
             client.OnMessage += BotOnMessage;
         }
 
         public void Start()
         {
+            allowedUsers = dataProvider.GetAllUsers();
             client.StartReceiving();
         }
 
