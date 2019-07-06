@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
@@ -34,28 +35,32 @@ namespace Hurricane
 
         private void BotOnMessage(object sender, MessageEventArgs e)
         {
-            LogMessage(e.Message);
+            LogMessageFromChat(e.Message);
 
             if (IsMessageTypeAllowed(e.Message.Type))
             {
+                string responseMessage;
+
                 if (IsChatAllowed(e.Message.Chat.Id)
                     && IsLoginAllowed(e.Message.Text))
                 {
                     string login = e.Message.Text;
                     string userData = dataProvider.GetUserData(login);
-                    client.SendTextMessageAsync(e.Message.Chat.Id, userData);
+                    responseMessage = userData;
                 }
                 else
                 {
-                    client.SendTextMessageAsync(e.Message.Chat.Id,
-                                                string.Format("Hello {0}!", e.Message.Chat.FirstName));
+                    responseMessage = string.Format("Hello {0}!", e.Message.Chat.FirstName);
                 }
+                SendMessageToChat(responseMessage, e.Message.Chat.Id);
+
+                Log.Information(string.Format("Respoce from bot:\r\n{0}", responseMessage));
             }
         }
 
-        private static void LogMessage(Message message)
+        private static void LogMessageFromChat(Message message)
         {
-            Log.Information(string.Format("Message from: {0} {1}\r\nCaht ID: {2}\r\nMessage: {3}",
+            Log.Information(string.Format("From: {0} {1}\r\nCaht ID: {2}\r\nMessage: {3}",
                             message.Chat.FirstName, message.Chat.LastName,
                             message.Chat.Id,
                             message.Text));
@@ -74,6 +79,11 @@ namespace Hurricane
         private bool IsLoginAllowed(string login)
         {
             return allowedUsers.Contains(login);
+        }
+
+        private void SendMessageToChat(string message, long chatId)
+        {
+            client.SendTextMessageAsync(chatId, message);
         }
 
         private bool IsLooksLikeLogin(string text)
