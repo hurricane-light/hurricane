@@ -39,22 +39,22 @@ namespace Hurricane
 
             if (IsMessageTypeAllowed(e.Message.Type))
             {
-                string responseMessage;
+                string inMessage = e.Message.Text.ToLower();
+                string outMessage;
 
                 if (IsChatAllowed(e.Message.Chat.Id)
-                    && IsLoginAllowed(e.Message.Text))
+                    && IsLoginAllowed(inMessage))
                 {
-                    string login = e.Message.Text;
-                    string userData = dataProvider.GetUserData(login);
-                    responseMessage = userData;
+                    string userData = dataProvider.GetUserData(inMessage);
+                    outMessage = userData;
                 }
                 else
                 {
-                    responseMessage = string.Format("Hello {0}!", e.Message.Chat.FirstName);
+                    outMessage = string.Format("Hello {0}!", e.Message.Chat.FirstName);
                 }
-                SendMessageToChat(responseMessage, e.Message.Chat.Id);
+                SendMessageToChat(outMessage, e.Message.Chat.Id);
 
-                Log.Information(string.Format("Respoce from bot:\r\n{0}", responseMessage));
+                Log.Information(string.Format("Respoce from bot:\r\n{0}", outMessage));
             }
         }
 
